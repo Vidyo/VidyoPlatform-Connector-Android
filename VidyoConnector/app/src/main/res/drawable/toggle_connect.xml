@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- When not selected, use callStart -->
+    <item android:drawable="@drawable/callstart" android:state_checked="false" />
+    <!-- When selected, use callEnd-->
+    <item android:drawable="@drawable/callend" android:state_checked="true" />
+
+</selector>
