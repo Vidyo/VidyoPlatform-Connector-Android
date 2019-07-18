@@ -1,16 +1,15 @@
-# VidyoConnector-legacy-Android
+## Overview
+**vidyoplatform-connector-android** is a [VidyoPlatform](https://vidyo.github.io/vidyoplatform.github.io) reference application highlighting how to integrate video chat into a native Android app.
+
+## Acquire VidyoClient Android SDK
+Download the latest VidyoClient Android SDK package [here](https://static.vidyo.io/latest/package/VidyoClient-AndroidSDK.zip) and unzip it.
 
 ## Clone Repository
-git clone https://github.com/Vidyo/VidyoConnector-legacy.git
-
-## Acquire Framework
-1. Download the latest Vidyo.io Android SDK package: https://static.vidyo.io/latest/package/VidyoClient-AndroidSDK.zip
-2. Copy the /lib folder located at VidyoClient-AndroidSDK to the /VidyoConnector directory  (VidyoConnector-legacy⁩ ▸ ⁨android⁩ ▸ ⁨VidyoConnector⁩).
-
-> Note: VidyoClient SDK version 4.1.24.15 or greater is required.
+Navigate to the *VidyoClient-AndroidSDK/samples/* directory and clone the repository at that location:<br/>
+git clone https://github.com/Vidyo/vidyoplatform-connector-android.git
 
 ## Build and Run Application
-1. Open the project under VidyoConnector-legacy⁩/android⁩/VidyoConnector directory with Android Studio 3.2 or later.
+1. Open the project *VidyoClient-AndroidSDK/samples/vidyoplatform-connector-android* with Android Studio 3.2 or later.
 2. Connect an Android device to your computer via USB.
 3. Enable "USB debugging": https://developer.android.com/studio/debug/dev-options
 4. Build and run the application on the Android device.
