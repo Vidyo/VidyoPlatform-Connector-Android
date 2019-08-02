@@ -171,7 +171,7 @@ public class MainActivity extends Activity implements
                 mVidyoConnector = new Connector(mVideoFrame,
                         Connector.ConnectorViewStyle.VIDYO_CONNECTORVIEWSTYLE_Default,
                         7,
-                        "info@VidyoClient info@VidyoConnector warning",
+                        "warning all@VidyoClient info@LmiPortalSession info@LmiPortalMembership info@LmiResourceManagerUpdates info@LmiPace info@LmiIce",
                         "",
                         0);
 
@@ -222,6 +222,10 @@ public class MainActivity extends Activity implements
     @Override
     protected void onStart() {
         mLogger.Log("onStart");
+        mPortal.setText(""); //set portal ahead of build if needed
+        mRoomKey.setText(""); // set roomkey ahead of build if needed
+        mDisplayName.setText(""); // set display name ahead of build if needed
+        mPin.setText(""); // set room pin ahead of build if needed
         super.onStart();
     }
 
