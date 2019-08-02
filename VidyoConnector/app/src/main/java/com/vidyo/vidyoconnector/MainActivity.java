@@ -168,10 +168,14 @@ public class MainActivity extends Activity implements
             // Construct Connector and register for events.
             try {
                 mLogger.Log("Constructing Connector");
+                String logLevel = mEnableDebug?"warning debug@VidyoClient all@LmiPortalSession " +
+                        "all@LmiPortalMembership info@LmiResourceManagerUpdates info@LmiPace info@LmiIce " +
+                        "all@LmiSignaling": "warning info@VidyoClient info@LmiPortalSession " +
+                        "info@LmiPortalMembership info@LmiResourceManagerUpdates info@LmiPace info@LmiIce";
                 mVidyoConnector = new Connector(mVideoFrame,
                         Connector.ConnectorViewStyle.VIDYO_CONNECTORVIEWSTYLE_Default,
                         7,
-                        "warning all@VidyoClient info@LmiPortalSession info@LmiPortalMembership info@LmiResourceManagerUpdates info@LmiPace info@LmiIce",
+                        logLevel,
                         "",
                         0);
 
