@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">VidyoPlatform Connector</string>
+
+    <string name="lib_version">Library version: %s</string>
+
+    <string name="disconnected">Disconnected</string>
+    <string name="connected">Connected</string>
+
+    <string name="start_conference">Video Conference</string>
+
+    <string name="debug_option">Debug option enabled:</string>
+    <string name="settings">Credentials</string>
+
+    <string name="note">Please check <b>ConnectParams.java</b> file in order to change these values</string>
+
+    <string name="credentials">VidyoPlatform credentials</string>
+</resources>

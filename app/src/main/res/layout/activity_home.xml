@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="@dimen/brand_icon_size"
+        android:layout_height="@dimen/brand_icon_size"
+        android:src="@drawable/vidyo_io_brand"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/credentials"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/material_margin"
+        android:gravity="center"
+        android:text="@string/credentials"
+        android:textAllCaps="true" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/material_margin"
+        android:layout_marginEnd="@dimen/material_margin">
+
+        <AutoCompleteTextView
+            android:id="@+id/portal_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Portal"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/material_margin"
+        android:layout_marginEnd="@dimen/material_margin">
+
+        <AutoCompleteTextView
+            android:id="@+id/room_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Room key"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/material_margin"
+        android:layout_marginEnd="@dimen/material_margin">
+
+        <AutoCompleteTextView
+            android:id="@+id/pin_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Pin"
+            android:inputType="numberPassword"
+            android:maxLines="1"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/material_margin"
+        android:layout_marginEnd="@dimen/material_margin">
+
+        <AutoCompleteTextView
+            android:id="@+id/name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Display Name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/material_margin"
+        android:gravity="center"
+        android:text="@string/note"
+        android:textSize="@dimen/mini_ts" />
+
+    <Button
+        android:id="@+id/start_conference"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/material_margin"
+        android:layout_marginTop="@dimen/material_margin"
+        android:onClick="onStartConference"
+        android:padding="@dimen/material_margin"
+        android:text="@string/start_conference" />
+</LinearLayout>

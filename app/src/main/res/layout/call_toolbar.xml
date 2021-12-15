@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@color/semi_trans"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/small_margin">
+
+        <ImageView
+            android:id="@+id/call_control"
+            style="@style/ControlButton"
+            android:src="@drawable/call_start"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/camera_control"
+            style="@style/ControlButton"
+            android:src="@drawable/camera_on"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/mic_control"
+            style="@style/ControlButton"
+            android:src="@drawable/microphone_on"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/speaker_control"
+            style="@style/ControlButton"
+            android:src="@drawable/speaker_on"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/switch_control"
+            style="@style/ControlButton"
+            android:src="@drawable/camera_switch"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/more_control"
+            style="@style/ControlButton"
+            android:src="@drawable/ic_expand_icon"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/control_settings_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/small_margin"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/more_debug"
+            style="@style/ControlButton"
+            android:src="@drawable/ic_debug_on"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/more_send_logs"
+            style="@style/ControlButton"
+            android:src="@drawable/ic_send_logs"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/library_version"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="@color/colorAccent"
+            tools:text="Library version" />
+
+        <TextView
+            android:id="@+id/connection_state"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            tools:text="CONNECTED" />
+    </LinearLayout>
+</LinearLayout>
