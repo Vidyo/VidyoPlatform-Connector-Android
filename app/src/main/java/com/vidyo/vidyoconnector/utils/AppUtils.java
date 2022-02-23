@@ -10,8 +10,11 @@ import android.os.Build;
 import androidx.core.content.FileProvider;
 
 import com.vidyo.vidyoconnector.BuildConfig;
+import com.vidyo.vidyoconnector.R;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,5 +130,31 @@ public class AppUtils {
                 || Build.PRODUCT.toLowerCase().contains("nox")
                 || Build.BOARD.toLowerCase().contains("nox")
                 || (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")));
+    }
+
+    private static final String CERTIFICATE_RAW_NAME = "ca-certificates.crt";
+
+    public static String writeCaCertificates(Context context) {
+        try {
+            InputStream caCertStream = context.getResources().openRawResource(R.raw.ca_certificates);
+
+            File caCertDirectory = new File(context.getFilesDir() + File.separator);
+            File caFile = new File(caCertDirectory, CERTIFICATE_RAW_NAME);
+
+            FileOutputStream caCertFile = new FileOutputStream(caFile);
+
+            byte[] buffer = new byte[1024];
+            int len;
+
+            while ((len = caCertStream.read(buffer)) != -1) {
+                caCertFile.write(buffer, 0, len);
+            }
+
+            caCertStream.close();
+            caCertFile.close();
+            return caFile.getPath();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

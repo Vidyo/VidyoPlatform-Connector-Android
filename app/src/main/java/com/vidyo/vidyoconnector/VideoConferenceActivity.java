@@ -109,9 +109,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         controlView = findViewById(R.id.control_view);
         controlView.registerListener(this);
 
-        String logLevel = "warning debug@VidyoClient all@LmiPortalSession " +
-                "all@LmiPortalMembership info@LmiResourceManagerUpdates " +
-                "info@LmiPace info@LmiIce all@LmiSignaling info@VidyoCameraEffect";
+        String logLevel = "warning debug@VidyoClient all@LmiPortalSession  all@LmiPortalMembership info@LmiResourceManagerUpdates  info@LmiPace info@LmiIce all@LmiSignaling info@VidyoCameraEffect";
 
         connector = new Connector(videoView, Connector.ConnectorViewStyle.VIDYO_CONNECTORVIEWSTYLE_Default, 8,
                 logLevel, AppUtils.configLogFile(this), 0);
@@ -165,7 +163,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
     @Override
     public void onFailure(final Connector.ConnectorFailReason connectorFailReason) {
         Logger.i("onFailure: %s", connectorFailReason.name());
-        if (connector != null) connector.unregisterResourceManagerEventListener();
 
         runOnUiThread(() -> {
             Toast.makeText(VideoConferenceActivity.this, connectorFailReason.name(), Toast.LENGTH_SHORT).show();
@@ -182,7 +179,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
     @Override
     public void onDisconnected(Connector.ConnectorDisconnectReason connectorDisconnectReason) {
         Logger.i("onDisconnected: %s", connectorDisconnectReason.name());
-        if (connector != null) connector.unregisterResourceManagerEventListener();
 
         runOnUiThread(() -> {
             Toast.makeText(VideoConferenceActivity.this, R.string.disconnected, Toast.LENGTH_SHORT).show();
@@ -225,6 +221,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
                     Logger.i("Start connection: %s, %s, %s, %s", portal, room, pin, name);
                     connector.connectToRoomAsGuest(portal, name, room, pin, this);
                 } else {
+                    Logger.i("Disconnect initiated by user.");
                     if (connector != null) connector.disconnect();
                 }
                 break;
@@ -296,10 +293,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         if (controlView != null) controlView.unregisterListener();
 
         if (connector != null) {
-            connector.unregisterLocalCameraEventListener();
-
             connector.hideView(videoView);
-
             connector.disable();
             connector = null;
         }
