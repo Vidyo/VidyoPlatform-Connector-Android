@@ -31,6 +31,8 @@ import com.vidyo.vidyoconnector.utils.Logger;
 import com.vidyo.vidyoconnector.view.ControlView;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -58,6 +60,8 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
 
     private final AtomicBoolean isCameraDisabledForBackground = new AtomicBoolean(false);
     private final AtomicBoolean isDisconnectAndQuit = new AtomicBoolean(false);
+
+    private final List<LocalCamera> localCameraList = new LinkedList<>();
 
     @Override
     public void onStart() {
@@ -109,7 +113,9 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         controlView = findViewById(R.id.control_view);
         controlView.registerListener(this);
 
-        String logLevel = "warning debug@VidyoClient all@LmiPortalSession  all@LmiPortalMembership info@LmiResourceManagerUpdates  info@LmiPace info@LmiIce all@LmiSignaling info@VidyoCameraEffect";
+        String logLevel = "warning debug@VidyoClient " +
+                "all@LmiPortalSession  all@LmiPortalMembership info@LmiResourceManagerUpdates " +
+                "info@LmiPace info@LmiIce all@LmiSignaling info@VidyoCameraEffect";
 
         connector = new Connector(videoView, Connector.ConnectorViewStyle.VIDYO_CONNECTORVIEWSTYLE_Default, 8,
                 logLevel, AppUtils.configLogFile(this), 0);
@@ -126,6 +132,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         connector.registerParticipantEventListener(this);
 
         connector.registerLogEventListener(this, logLevel);
+//        connector.setCertificateAuthorityFile(AppUtils.writeCaCertificates(this));
 
         /* Await view availability */
         videoView.addOnLayoutChangeListener(this);
@@ -245,7 +252,12 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
                 connector.setSpeakerPrivacy((boolean) event.getValue());
                 break;
             case CYCLE_CAMERA:
-                connector.cycleCamera();
+                for (LocalCamera localCamera : this.localCameraList)
+                    if (localCamera.getPosition() != lastSelectedLocalCamera.getPosition()) {
+                        Logger.i("Going to select: %s local camera", localCamera.getName());
+                        connector.selectLocalCamera(localCamera);
+                        break;
+                    }
                 break;
             case DEBUG_OPTION:
                 boolean value = (boolean) event.getValue();
@@ -306,6 +318,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
     public void onLocalCameraAdded(LocalCamera localCamera) {
         if (localCamera != null) {
             Logger.i("onLocalCameraAdded: %s", localCamera.name);
+            localCameraList.add(localCamera);
         }
     }
 
