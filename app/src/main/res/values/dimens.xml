@@ -7,7 +7,7 @@
     <dimen name="material_margin">16dp</dimen>
     <dimen name="small_margin">8dp</dimen>
 
-    <dimen name="brand_icon_size">256dp</dimen>
+    <dimen name="brand_icon_size">128dp</dimen>
 
     <dimen name="control_icon_size">42dp</dimen>
     <dimen name="control_view_size">88dp</dimen>

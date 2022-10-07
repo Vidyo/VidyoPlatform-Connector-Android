@@ -73,8 +73,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             connector.setMode(Connector.ConnectorMode.VIDYO_CONNECTORMODE_Foreground);
 
             connector.setCameraPrivacy(state.isMuteCamera());
-            connector.setMicrophonePrivacy(state.isMuteMic());
-            connector.setSpeakerPrivacy(state.isMuteSpeaker());
         }
 
         if (connector != null && lastSelectedLocalCamera != null && isCameraDisabledForBackground.getAndSet(false)) {
@@ -87,10 +85,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         super.onStop();
         if (connector != null) {
             connector.setMode(Connector.ConnectorMode.VIDYO_CONNECTORMODE_Background);
-
             connector.setCameraPrivacy(true);
-            connector.setMicrophonePrivacy(true);
-            connector.setSpeakerPrivacy(true);
         }
 
         if (!isFinishing() && connector != null && !controlView.getState().isMuteCamera() && !isCameraDisabledForBackground.getAndSet(true)) {
