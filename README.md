@@ -13,7 +13,7 @@ https://github.com/tmelko-vidyo/vidyoplatform-connector-android.git
 
 # Build and Run Application
 
-#### Android Studio 2021.x | Gradle tools: 7.1.3 | Kotlin Plugin 1.6.10 | Target SDK version: 32 | Min SDK version: 23
+#### Android Studio 2022.x | Gradle tools: 7.3.1 | Kotlin Plugin 1.7.10 | Target SDK version: 33 | Min SDK version: 23
 
 - Upgrade Gradle file if necessary
 - Download required build-tools
