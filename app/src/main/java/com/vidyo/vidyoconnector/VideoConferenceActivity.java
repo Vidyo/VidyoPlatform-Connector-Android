@@ -127,7 +127,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         connector.registerParticipantEventListener(this);
 
         connector.registerLogEventListener(this, logLevel);
-//        connector.setCertificateAuthorityFile(AppUtils.writeCaCertificates(this));
+        connector.setCertificateAuthorityFile(AppUtils.writeCaCertificates(this));
 
         /* Await view availability */
         videoView.addOnLayoutChangeListener(this);

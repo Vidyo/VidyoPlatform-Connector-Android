@@ -78,18 +78,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void requestPermissions() {
-        if (Build.VERSION.SDK_INT > LOLLIPOP_MR1) {
-            List<String> permissionsNeeded = new ArrayList<>();
-            for (String permission : PERMISSIONS) {
-                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
-                    permissionsNeeded.add(permission);
-            }
+        List<String> permissionsNeeded = new ArrayList<>();
+        for (String permission : PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED)
+                permissionsNeeded.add(permission);
+        }
 
-            if (permissionsNeeded.size() > 0) {
-                ActivityCompat.requestPermissions(this, permissionsNeeded.toArray(new String[0]), PERMISSIONS_REQUEST_ALL);
-            } else {
-                enable(true);
-            }
+        if (permissionsNeeded.size() > 0) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSIONS_REQUEST_ALL);
         } else {
             enable(true);
         }
