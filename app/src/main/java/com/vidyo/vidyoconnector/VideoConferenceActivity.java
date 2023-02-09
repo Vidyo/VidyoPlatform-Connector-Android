@@ -30,6 +30,7 @@ import com.vidyo.vidyoconnector.utils.FontsUtils;
 import com.vidyo.vidyoconnector.utils.Logger;
 import com.vidyo.vidyoconnector.view.ControlView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +58,8 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
 
     private Connector connector;
     private LocalCamera lastSelectedLocalCamera;
+
+    private LocalSpeaker localSpeaker;
 
     private final AtomicBoolean isCameraDisabledForBackground = new AtomicBoolean(false);
     private final AtomicBoolean isDisconnectAndQuit = new AtomicBoolean(false);
@@ -127,7 +130,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         connector.registerParticipantEventListener(this);
 
         connector.registerLogEventListener(this, logLevel);
-        connector.setCertificateAuthorityFile(AppUtils.writeCaCertificates(this));
+//        connector.setCertificateAuthorityFile(AppUtils.writeCaCertificates(this));
 
         /* Await view availability */
         videoView.addOnLayoutChangeListener(this);
@@ -159,6 +162,8 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             controlView.connectedCall(true);
             controlView.updateConnectionState(ControlView.ConnectionState.CONNECTED);
             controlView.disable(false);
+
+            startAudioDebugging();
         });
     }
 
@@ -175,6 +180,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             controlView.disable(false);
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            stopAudioDebugging();
         });
     }
 
@@ -191,6 +197,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             controlView.disable(false);
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            stopAudioDebugging();
 
             /* Wrap up the conference */
             if (isDisconnectAndQuit.get()) {
@@ -359,6 +366,17 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         videoView.requestLayout();
     }
 
+    private void startAudioDebugging() {
+        if (localSpeaker == null) return;
+        File dir = new File(getFilesDir(), "AudioRecording/Speaker");
+        localSpeaker.enableDebugRecordings(dir.getAbsolutePath());
+    }
+
+    private void stopAudioDebugging() {
+        if (localSpeaker == null) return;
+        localSpeaker.disableDebugRecordings();
+    }
+
     @Override
     public void onLocalMicrophoneAdded(LocalMicrophone localMicrophone) {
 
@@ -371,7 +389,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
 
     @Override
     public void onLocalMicrophoneSelected(LocalMicrophone localMicrophone) {
-
     }
 
     @Override
@@ -391,7 +408,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
 
     @Override
     public void onLocalSpeakerSelected(LocalSpeaker localSpeaker) {
-
+        this.localSpeaker = localSpeaker;
     }
 
     @Override
