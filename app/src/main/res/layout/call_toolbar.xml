@@ -66,7 +66,7 @@
         <ImageView
             android:id="@+id/more_debug"
             style="@style/ControlButton"
-            android:src="@drawable/ic_debug_on"
+            android:src="@drawable/ic_debug"
             tools:ignore="ContentDescription" />
 
         <ImageView

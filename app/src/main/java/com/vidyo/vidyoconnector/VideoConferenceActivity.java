@@ -1,18 +1,13 @@
 package com.vidyo.vidyoconnector;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.format.DateUtils;
-import android.view.Display;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.vidyo.VidyoClient.Connector.Connector;
@@ -40,12 +35,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Conference activity holding all connection and callbacks logic.
  */
 public class VideoConferenceActivity extends FragmentActivity implements Connector.IConnect,
-        Connector.IRegisterLocalCameraEventListener,
-        Connector.IRegisterLocalMicrophoneEventListener,
-        Connector.IRegisterLocalSpeakerEventListener,
-        Connector.IRegisterLogEventListener,
-        Connector.IRegisterParticipantEventListener,
-        IControlEventHandler, View.OnLayoutChangeListener {
+        Connector.IRegisterLocalCameraEventListener, Connector.IRegisterLocalMicrophoneEventListener,
+        Connector.IRegisterLocalSpeakerEventListener, Connector.IRegisterLogEventListener,
+        Connector.IRegisterParticipantEventListener, IControlEventHandler,
+        ViewTreeObserver.OnGlobalLayoutListener {
 
     public static final String PORTAL_KEY = "portal.key";
     public static final String ROOM_KEY = "room.key";
@@ -111,12 +104,10 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         controlView = findViewById(R.id.control_view);
         controlView.registerListener(this);
 
-        String logLevel = "warning debug@VidyoClient " +
-                "all@LmiPortalSession  all@LmiPortalMembership info@LmiResourceManagerUpdates " +
-                "info@LmiPace info@LmiIce all@LmiSignaling info@VidyoCameraEffect";
+        String logLevel = "warning debug@VidyoClient all@LmiPortalSession  all@LmiPortalMembership info@LmiPace info@LmiIce all@LmiSignaling";
 
-        connector = new Connector(videoView, Connector.ConnectorViewStyle.VIDYO_CONNECTORVIEWSTYLE_Default, 8,
-                logLevel, AppUtils.configLogFile(this), 0);
+        connector = new Connector(videoView, Connector.ConnectorViewStyle.VIDYO_CONNECTORVIEWSTYLE_Tiles, 8,
+                logLevel, "", 0);
         Logger.i("Connector instance has been created.");
 
         FontsUtils fontsUtils = new FontsUtils(this);
@@ -129,28 +120,11 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         connector.registerLocalSpeakerEventListener(this);
         connector.registerParticipantEventListener(this);
 
-        connector.registerLogEventListener(this, logLevel);
+//        connector.registerLogEventListener(this, logLevel);
 //        connector.setCertificateAuthorityFile(AppUtils.writeCaCertificates(this));
 
         /* Await view availability */
-        videoView.addOnLayoutChangeListener(this);
-    }
-
-    @Override
-    public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        view.removeOnLayoutChangeListener(this);
-
-        int width = view.getWidth();
-        int height = view.getHeight();
-
-        connector.showViewAt(view, 0, 0, width, height);
-        Logger.i("Show View at: " + width + ", " + height);
-    }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        new Handler().postDelayed(this::updateView, DateUtils.SECOND_IN_MILLIS * 2);
+        videoView.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
     @Override
@@ -306,6 +280,9 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         super.onDestroy();
         if (controlView != null) controlView.unregisterListener();
 
+        if (videoView.getViewTreeObserver() != null)
+            videoView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
         if (connector != null) {
             connector.hideView(videoView);
             connector.disable();
@@ -352,18 +329,17 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         /* Write log into a custom file */
     }
 
-    private void updateView() {
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
+    @Override
+    public void onGlobalLayout() {
+        if (videoView == null) return;
 
-        FrameLayout.LayoutParams videoViewParams = new FrameLayout.LayoutParams(width, height);
-        videoView.setLayoutParams(videoViewParams);
+        int width = videoView.getWidth();
+        int height = videoView.getHeight();
 
-        videoView.addOnLayoutChangeListener(this);
-        videoView.requestLayout();
+        if (height == 0 && width == 0) return;
+
+        connector.showViewAt(videoView, 0, 0, width, height);
+        Logger.i("ShowViewAt: %dx%d", width, height);
     }
 
     private void startAudioDebugging() {

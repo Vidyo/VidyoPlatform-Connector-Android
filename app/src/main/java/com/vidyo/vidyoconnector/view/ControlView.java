@@ -103,7 +103,7 @@ public class ControlView extends LinearLayout implements View.OnClickListener {
         muteCamera.setImageResource(internalState.isMuteCamera() ? R.drawable.camera_off : R.drawable.camera_on);
         muteMic.setImageResource(internalState.isMuteMic() ? R.drawable.microphone_off : R.drawable.microphone_on);
         muteSpeaker.setImageResource(internalState.isMuteSpeaker() ? R.drawable.speaker_off : R.drawable.speaker_on);
-        debugOption.setImageResource(internalState.isDebug() ? R.drawable.ic_debug_on : R.drawable.ic_debug_off);
+        debugOption.setAlpha(internalState.isDebug() ? 1.0f : 0.5f);
     }
 
     private void init() {
