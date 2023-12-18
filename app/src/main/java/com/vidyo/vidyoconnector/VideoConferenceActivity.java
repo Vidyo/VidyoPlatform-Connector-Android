@@ -25,7 +25,6 @@ import com.vidyo.vidyoconnector.utils.FontsUtils;
 import com.vidyo.vidyoconnector.utils.Logger;
 import com.vidyo.vidyoconnector.view.ControlView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,8 +50,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
 
     private Connector connector;
     private LocalCamera lastSelectedLocalCamera;
-
-    private LocalSpeaker localSpeaker;
 
     private final AtomicBoolean isCameraDisabledForBackground = new AtomicBoolean(false);
     private final AtomicBoolean isDisconnectAndQuit = new AtomicBoolean(false);
@@ -104,11 +101,13 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         controlView = findViewById(R.id.control_view);
         controlView.registerListener(this);
 
-        String logLevel = "warning debug@VidyoClient all@LmiPortalSession  all@LmiPortalMembership info@LmiPace info@LmiIce all@LmiSignaling";
+        String logLevel = "warning debug@VidyoClient all@LmiPortalSession all@LmiPortalMembership info@LmiPace info@LmiIce all@LmiSignaling";
 
         connector = new Connector(videoView, Connector.ConnectorViewStyle.VIDYO_CONNECTORVIEWSTYLE_Tiles, 8,
                 logLevel, "", 0);
         Logger.i("Connector instance has been created.");
+        connector.setLogLevel(Connector.ConnectorLoggerType.VIDYO_CONNECTORLOGGERTYPE_FILE,
+                Connector.ConnectorLogLevel.VIDYO_CONNECTORLOGLEVEL_DEBUG);
 
         FontsUtils fontsUtils = new FontsUtils(this);
         connector.setFontFileName(fontsUtils.fontFile().getPath());
@@ -136,8 +135,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             controlView.connectedCall(true);
             controlView.updateConnectionState(ControlView.ConnectionState.CONNECTED);
             controlView.disable(false);
-
-            startAudioDebugging();
         });
     }
 
@@ -154,7 +151,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             controlView.disable(false);
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            stopAudioDebugging();
+
         });
     }
 
@@ -171,7 +168,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
             controlView.disable(false);
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-            stopAudioDebugging();
 
             /* Wrap up the conference */
             if (isDisconnectAndQuit.get()) {
@@ -181,7 +177,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
     }
 
     @Override
-    public void onControlEvent(ControlEvent event) {
+    public void onControlEvent(ControlEvent<?> event) {
         if (connector == null) return;
 
         switch (event.getCall()) {
@@ -261,7 +257,8 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
 
         Connector.ConnectorState state = connector.getState();
 
-        if (state == Connector.ConnectorState.VIDYO_CONNECTORSTATE_Idle || state == Connector.ConnectorState.VIDYO_CONNECTORSTATE_Ready) {
+        if (state == Connector.ConnectorState.VIDYO_CONNECTORSTATE_Idle
+                || state == Connector.ConnectorState.VIDYO_CONNECTORSTATE_Ready) {
             super.onBackPressed();
         } else {
             /* You are still connecting or connected */
@@ -306,9 +303,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         if (localCamera != null) {
             Logger.i("onLocalCameraSelected: %s", localCamera.name);
             this.lastSelectedLocalCamera = localCamera;
-
-//            localCamera.setTargetBitRate(800000);
-//            localCamera.setMaxConstraint(320, 240, 1_000_000_000 / 5);
         }
     }
 
@@ -342,17 +336,6 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
         Logger.i("ShowViewAt: %dx%d", width, height);
     }
 
-    private void startAudioDebugging() {
-        if (localSpeaker == null) return;
-        File dir = new File(getFilesDir(), "AudioRecording/Speaker");
-        localSpeaker.enableDebugRecordings(dir.getAbsolutePath());
-    }
-
-    private void stopAudioDebugging() {
-        if (localSpeaker == null) return;
-        localSpeaker.disableDebugRecordings();
-    }
-
     @Override
     public void onLocalMicrophoneAdded(LocalMicrophone localMicrophone) {
 
@@ -384,7 +367,7 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
 
     @Override
     public void onLocalSpeakerSelected(LocalSpeaker localSpeaker) {
-        this.localSpeaker = localSpeaker;
+
     }
 
     @Override
@@ -394,12 +377,14 @@ public class VideoConferenceActivity extends FragmentActivity implements Connect
 
     @Override
     public void onParticipantJoined(Participant participant) {
-        Logger.i("Participant joined: %s", participant.getUserId());
+        Logger.i("Participant joined: %s | %s",
+                participant.getUserId(), participant.getId());
     }
 
     @Override
     public void onParticipantLeft(Participant participant) {
-        Logger.i("Participant left: %s", participant.getUserId());
+        Logger.i("Participant left: %s | %s",
+                participant.getUserId(), participant.getId());
     }
 
     @Override
